@@ -40,6 +40,8 @@ Une vitesse trop basse fait patiner la chaîne sous charge, une vitesse trop hau
 
 Nécessite [PlatformIO](https://platformio.org/) dans Visual Studio Code.
 
+<img src="docs/blocs/01.png" alt="Terminal bash : compiler et téléverser" width="100%">
+
 ```bash
 pio run                  # compilation
 pio run -t upload        # téléversement du firmware
