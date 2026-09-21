@@ -14,12 +14,7 @@ Comme les autres modules, il se configure au premier démarrage par portail capt
 
 Un capteur à effet Hall sur l'arbre donne une impulsion par tour. Cette mesure sert deux fois : elle asservit la vitesse à la consigne, et elle détecte un blocage. Une chaîne qui force sans avancer ne produit plus d'impulsions, et le module coupe.
 
-```
-Train en pied      état ENGAGED
-Ordre reçu         rampe d'accélération, état LIFTING
-Crête atteinte     rampe de décélération, chaîne relâchée, état CREST
-Plus d'impulsion   coupure immédiate, état FAULT
-```
+<img src="docs/schemas/etats.png" alt="ENGAGED : train détecté en pied de montée, la chaîne peut l'accrocher. LIFTING : montée en cours, vitesse asservie sur les impulsions du capteur Hall. CREST : crête atteinte, décélération puis relâche de la chaîne, avant le train suivant. FAULT : le capteur Hall se tait plus de STALL_TIMEOUT_MS, la chaîne force sans avancer, le moteur coupe." width="100%">
 
 Les rampes de `RAMP_MS` évitent le démarrage sec : sans elles, la chaîne claque et le train est secoué au départ comme à l'arrivée.
 
@@ -33,25 +28,11 @@ Les rampes de `RAMP_MS` évitent le démarrage sec : sans elles, la chaîne claq
 
 <img src="docs/sections/s03.png" alt="03 Matériel" width="100%">
 
-| Élément | Broche | Rôle |
-|:--|:--|:--|
-| Moteur, rapport cyclique | 25 | Vitesse de la chaîne |
-| Moteur, sens | 26 | Sens de rotation |
-| Moteur, activation | 27 | Coupure de puissance |
-| Capteur Hall | 34 | Une impulsion par tour |
-| Capteur bas | 35 | Présence en pied de montée |
-| Capteur crête | 32 | Arrivée en haut |
-| LED marche | 2 | État `LIFTING` |
-| LED défaut | 4 | État `FAULT` |
+<img src="docs/schemas/brochage.png" alt="Sorties : GPIO 25 moteur PWM pour la vitesse de la chaîne, GPIO 26 sens de rotation, GPIO 27 activation du moteur, GPIO 2 LED marche pour l'état LIFTING, GPIO 4 LED défaut pour l'état FAULT. Entrées : GPIO 34 capteur Hall, une impulsion par tour, GPIO 35 capteur bas pour la présence en pied de montée, GPIO 32 capteur crête pour l'arrivée en haut." width="100%">
 
 <img src="docs/sections/s04.png" alt="04 Réglages" width="100%">
 
-| Paramètre | Effet |
-|:--|:--|
-| `LIFT_SPEED_PERCENT` | Vitesse de montée visée |
-| `RAMP_MS` | Douceur du départ et de l'arrivée en crête |
-| `STALL_TIMEOUT_MS` | Silence du capteur Hall toléré avant de déclarer le blocage |
-| `LIFT_TIMEOUT_MS` | Durée maximale d'une montée avant défaut |
+<img src="docs/schemas/reglages.png" alt="LIFT_SPEED_PERCENT : vitesse de montée visée, trop basse la chaîne patine sous charge. RAMP_MS : douceur du départ et de l'arrivée en crête. STALL_TIMEOUT_MS : silence toléré du capteur Hall avant de déclarer le blocage. LIFT_TIMEOUT_MS : durée maximale d'une montée avant de passer en défaut." width="100%">
 
 Une vitesse trop basse fait patiner la chaîne sous charge, une vitesse trop haute rend l'arrivée en crête sèche. `RAMP_MS` rattrape la seconde, pas la première.
 
