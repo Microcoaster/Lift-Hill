@@ -8,7 +8,9 @@ La montée est la méthode classique pour donner au train l'énergie dont il viv
 
 Comme les autres modules, il se configure au premier démarrage par portail captif, puis rejoint le serveur en WebSocket.
 
-## Principe
+**Version 0.1.0**
+
+<img src="docs/sections/s01.png" alt="01 Principe" width="100%">
 
 Un capteur à effet Hall sur l'arbre donne une impulsion par tour. Cette mesure sert deux fois : elle asservit la vitesse à la consigne, et elle détecte un blocage. Une chaîne qui force sans avancer ne produit plus d'impulsions, et le module coupe.
 
@@ -21,7 +23,7 @@ Plus d'impulsion   coupure immédiate, état FAULT
 
 Les rampes de `RAMP_MS` évitent le démarrage sec : sans elles, la chaîne claque et le train est secoué au départ comme à l'arrivée.
 
-## Sécurité
+<img src="docs/sections/s02.png" alt="02 Sécurité" width="100%">
 
 **L'anti-retour est mécanique.** Le firmware le surveille, il ne le remplace pas. Un cliquet empêche la redescente, et aucune ligne de code ne doit servir de substitut à cette pièce.
 
@@ -29,7 +31,7 @@ Les rampes de `RAMP_MS` évitent le démarrage sec : sans elles, la chaîne claq
 
 **Deux délais bornent l'opération.** `STALL_TIMEOUT_MS` déclare le blocage si le capteur Hall se tait. `LIFT_TIMEOUT_MS` déclare le défaut si la crête n'est jamais atteinte.
 
-## Matériel
+<img src="docs/sections/s03.png" alt="03 Matériel" width="100%">
 
 | Élément | Broche | Rôle |
 |:--|:--|:--|
@@ -42,7 +44,18 @@ Les rampes de `RAMP_MS` évitent le démarrage sec : sans elles, la chaîne claq
 | LED marche | 2 | État `LIFTING` |
 | LED défaut | 4 | État `FAULT` |
 
-## Compiler et téléverser
+<img src="docs/sections/s04.png" alt="04 Réglages" width="100%">
+
+| Paramètre | Effet |
+|:--|:--|
+| `LIFT_SPEED_PERCENT` | Vitesse de montée visée |
+| `RAMP_MS` | Douceur du départ et de l'arrivée en crête |
+| `STALL_TIMEOUT_MS` | Silence du capteur Hall toléré avant de déclarer le blocage |
+| `LIFT_TIMEOUT_MS` | Durée maximale d'une montée avant défaut |
+
+Une vitesse trop basse fait patiner la chaîne sous charge, une vitesse trop haute rend l'arrivée en crête sèche. `RAMP_MS` rattrape la seconde, pas la première.
+
+<img src="docs/sections/s05.png" alt="05 Mise en service" width="100%">
 
 Nécessite [PlatformIO](https://platformio.org/) dans Visual Studio Code.
 
@@ -53,8 +66,6 @@ pio run -t uploadfs      # téléversement du portail vers LittleFS
 pio device monitor       # console série, 115200 bauds
 ```
 
-## Première mise en service
-
 1. Alimenter le module. Il crée un point d'accès WiFi.
 2. S'y connecter et ouvrir `http://192.168.4.1`.
 3. Renseigner le réseau de destination.
@@ -62,10 +73,12 @@ pio device monitor       # console série, 115200 bauds
 
 Les identifiants restent en mémoire du module, jamais dans le dépôt.
 
-## État
+<img src="docs/sections/s06.png" alt="06 Écosystème" width="100%">
 
-Version `0.1.0`. Le squelette, le brochage et la machine à états sont posés dans `src/main.cpp`. Restent à écrire l'asservissement de vitesse, la détection de blocage sur interruption et la remontée de télémétrie.
+Le squelette, le brochage et la machine à états sont posés dans `src/main.cpp`. Restent à écrire l'asservissement de vitesse, la détection de blocage sur interruption et la remontée de télémétrie.
+
+Le socle commun à tous les modules est le [WiFi Manager](https://github.com/Microcoaster/MicroCoaster_WifiManager). L'autre manière de donner son énergie au train est le [Launch Track](https://github.com/Microcoaster/Launch-Track). Le pilotage se fait depuis la [WebApp](https://github.com/Microcoaster/MicroCoasterWebApp).
 
 ---
 
-<sub>MicroCoaster · Auteurs : CyberSpaceRS, Yamakajump</sub>
+<sub>MicroCoaster · Auteur : Cybertrist</sub>
