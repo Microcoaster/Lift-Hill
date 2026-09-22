@@ -4,7 +4,7 @@
  * Montée du train : entraînement par chaîne, contrôle de vitesse, détection
  * d'arrivée en crête et anti-retour.
  *
- * Auteurs: CyberSpaceRS, Yamakajump
+ * Auteurs: Cybertrist, Yamakajump
  * Version: 0.1.0
  */
 
